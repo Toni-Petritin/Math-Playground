@@ -20,6 +20,11 @@ public class OutsiderControls : MonoBehaviour
     private Light spotlight;
     private float redshift;
 
+    [SerializeField]
+    private Collider pathingBox;
+
+    private Vector3 movingTo;
+
     void Start()
     {
         unitCircleProj = Mathf.Cos(Mathf.Deg2Rad * sightConeAngle * 0.5f);
@@ -59,6 +64,7 @@ public class OutsiderControls : MonoBehaviour
 
         spotlight.intensity = 2 + redshift * 3;
         spotlight.color = new Color(1, 1 - redshift, 1 - redshift, 1);
+
     }
 
     private void OnValidate()
@@ -86,4 +92,27 @@ public class OutsiderControls : MonoBehaviour
         }
         return unNormed;
     }
+
+    private void ContinueMoving()
+    {
+        if (MyMagnitude(this.transform.position - movingTo) < 1)
+        {
+            movingTo = GetNewDestination();
+        }
+
+
+    }
+
+    private Vector3 GetNewDestination()
+    {
+        Vector3 position = pathingBox.bounds.center;
+        Vector3 extents = pathingBox.bounds.extents;
+
+        position.x += Random.Range(-extents.x, extents.x);
+        position.y += Random.Range(-extents.y, extents.y);
+        position.z += Random.Range(-extents.z, extents.z);
+        return position;
+    }
+
+
 }
