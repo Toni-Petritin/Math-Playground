@@ -21,9 +21,8 @@ public class BezierPath : MonoBehaviour
     public float meshScale = .2f;
 
     public BezierPoint[] points; // For storing all bezier points
-
-    [SerializeField]
-    private Mesh mesh = new Mesh();
+        
+    private Mesh mesh;
 
     [SerializeField]
     private bool showFrame = true; // Hides the frame (currently always a closed path)
@@ -98,6 +97,7 @@ public class BezierPath : MonoBehaviour
 
     private void Awake()
     {
+
         GenerateMesh();
 
         GetComponent<MeshFilter>().sharedMesh = mesh;

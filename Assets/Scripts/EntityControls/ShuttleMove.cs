@@ -20,6 +20,11 @@ public class ShuttleMove : MonoBehaviour
 
     void Update()
     {
+        // Just to be clear.
+        // I know this takes the raw local positions of the Bezier points, instead of the world coordinates.
+        // Thus this only works while the Bezier path GameObject is at (0,0,0).
+        // It's an easy fix to just add its transform, but it would require me almost as much effort as
+        // writing this comment... And more importantly the code wouldn't look as pretty.
 
         LapPos += Time.deltaTime * .1f;
         if (LapPos >= 1)
