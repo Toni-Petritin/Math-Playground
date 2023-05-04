@@ -5,21 +5,23 @@ using UnityEngine;
 
 public class OutsiderControls : MonoBehaviour
 {
-
+    // Sight variables
     public float sightRange = 15;
     public GameObject lookDirObject;
     public float sightConeAngle = 60;
     public GameObject targetObject;
     public float targetAtRange;
+
+    // Sight indicators
+    [SerializeField]
+    private Light spotlight;
+    private float redshift;
+
     // These just so we can see the numbers in the editor.
     [SerializeField]
     private float scalarDot;
     [SerializeField]
     private float unitCircleProj;
-
-    [SerializeField]
-    private Light spotlight;
-    private float redshift;
 
     // Pathing
     [SerializeField]
@@ -28,6 +30,11 @@ public class OutsiderControls : MonoBehaviour
     public float acceleration = 2;
     public Vector3 dir = Vector3.zero;
 
+    // Gliders
+    public OutGlider gliderPrefab;
+    public Collider gliderBox;
+    public float summonInterval = .5f;
+    private float summonTimer = 0;
 
     void Start()
     {
@@ -52,9 +59,18 @@ public class OutsiderControls : MonoBehaviour
         // (It's a radial trigger, just in 3d.)
         if (scalarDot > unitCircleProj && targetAtRange < sightRange)
         {
+            summonTimer += Time.deltaTime;
+
             if (redshift < 1)
             {
                 redshift += Time.deltaTime * 2;
+            }
+            else if (summonTimer > summonInterval)
+            {
+                summonTimer = 0;
+                OutGlider glider = Instantiate(gliderPrefab, transform.position, Quaternion.identity);
+                glider.pathingBox = gliderBox;
+                glider.targetObject = targetObject;
             }
         }
         else

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3493609467596906269}
   - component: {fileID: 3493609467596906270}
   - component: {fileID: 3493609467596906271}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Chassis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 3493609467862903631}
   - component: {fileID: 3493609467862903624}
   - component: {fileID: 3493609467862903625}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wing L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 3493609467919085144}
   - component: {fileID: 3493609467919085145}
   - component: {fileID: 3493609467919085146}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wing R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 3493609468150323719}
   - component: {fileID: 3493609468150323712}
   - component: {fileID: 3493609468150323713}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cockpit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +397,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3493609468255575379}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BlueWing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 3493609469631741081}
   - component: {fileID: 3493609469631741082}
   - component: {fileID: 3493609469631741083}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

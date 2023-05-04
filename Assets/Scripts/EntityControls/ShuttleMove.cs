@@ -26,7 +26,7 @@ public class ShuttleMove : MonoBehaviour
         // It's an easy fix to just add its transform, but it would require me almost as much effort as
         // writing this comment... And more importantly the code wouldn't look as pretty.
 
-        LapPos += Time.deltaTime * .1f;
+        LapPos += Time.deltaTime * .05f;
         if (LapPos >= 1)
         {
             LapPos = 0;
