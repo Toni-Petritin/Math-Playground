@@ -8,11 +8,11 @@ public class GeneratePlane : MonoBehaviour {
     [Range(1.0f, 1000.0f)]
     public float Size = 10.0f;
 
-    [Range(2, 255)]
+    [Range(2, 500)]
     public int Segments = 5;
 
-    [Range(0.1f,20f)]
-    public float NoiseFactor = 1;
+    [Range(0f,10000f)]
+    public float offsetSeed = 0;
 
     [Range(3,10)]
     public float AmplitudeFirst = 5;
@@ -32,6 +32,18 @@ public class GeneratePlane : MonoBehaviour {
     [Range(.1f, 1)]
     public float DivThird = 1;
 
+    [Range(0f,5f)]
+    public float platouLevel = 1;
+
+    [Range(1f,10f)]
+    public float DivRock1 = 4;
+
+    [Range(1f, 4f)]
+    public float DivRockCut1 = 2;
+    
+    [Range(0.01f, .5f)]
+    public float DivRockCut2 = .1f;
+
     private Mesh mesh = null;
 
     private void OnEnable() {
@@ -48,6 +60,7 @@ public class GeneratePlane : MonoBehaviour {
         // vertices
         List<Vector3> verts = new List<Vector3>();
         List<int> tris = new List<int>();
+        List<Color> colors = new List<Color>();
 
         // Delta between segments
         float delta = Size / (float)Segments;
@@ -66,22 +79,28 @@ public class GeneratePlane : MonoBehaviour {
         //float noisevalue = Mathf.Clamp01(Mathf.PerlinNoise(x*.1f, z*.1f)) * NoiseFactor;
 
         for (int seg_x = 0; seg_x <= Segments; seg_x++) {
-            x = (float)seg_x * delta;
+            x = (float)seg_x * delta + offsetSeed;
             for (int seg_z = 0; seg_z <= Segments; seg_z++) {
 
-                z = (float)seg_z * delta;
+                z = (float)seg_z * delta + offsetSeed;
 
                 // Generate the Perlin Noise
-                //z = (Mathf.PerlinNoise(x, y);
-                float y1 = (Mathf.PerlinNoise((x / DivFirst), (z / DivFirst)) *
+                float y1 = (Mathf.PerlinNoise(x / DivFirst, z / DivFirst) *
                 AmplitudeFirst);
-                float y2 = (Mathf.PerlinNoise((x / DivSecond), (z / DivSecond)) *
+                float y2 = (Mathf.PerlinNoise(x / DivSecond, z / DivSecond) *
                 AmplitudeSecond);
-                float y3 = (Mathf.PerlinNoise((x / DivThird), (z / DivThird)) *
+                float y3 = (Mathf.PerlinNoise(x / DivThird, z / DivThird) *
                 AmplitudeThird);
-                y = y1 + y2 + y3;
 
-                verts.Add(new Vector3(x, y, z));
+                // Generate rocks
+                float y_rock1 = (Mathf.Max(Mathf.PerlinNoise(x / DivRock1, z / DivRock1), 0.7f) - 0.7f) * 10f;
+                float y_rock2 = (Mathf.Max(Mathf.PerlinNoise(x / DivRockCut1, z / DivRockCut1), 0.5f) - 0.5f) * 10f;
+                float y_rock3 = (Mathf.Max(Mathf.PerlinNoise(x / DivRockCut2, z / DivRockCut2), 0.3f) - 0.3f) * 2f;
+                float y_rock = Mathf.Max(0, y_rock1 - y_rock2 - y_rock3);
+
+                y = Mathf.Max(platouLevel , y1 + y2 + y3) + y_rock;
+
+                verts.Add(new Vector3((float)seg_x * delta, y, (float)seg_z * delta));
             }
         }
 
