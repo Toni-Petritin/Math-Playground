@@ -89,6 +89,7 @@ public class GeneratePlane : MonoBehaviour {
                 float y_rock3 = Mathf.PerlinNoise(x / DivRockBottom1, z / DivRockBottom1) * 2f;
                 float y_rock = Mathf.Max(0, Mathf.Min( y_rock1 - y_rock2, y_rock3)) * AmplitudeRock;
 
+                // Honestly, the rocks should be their own generation to avoid buggy textures, but I wanted to play around a bit.
                 y = Mathf.Max(platouLevel , y1 + y2 + y3) + y_rock;
 
                 verts.Add(new Vector3((float)seg_x * delta, y, (float)seg_z * delta));

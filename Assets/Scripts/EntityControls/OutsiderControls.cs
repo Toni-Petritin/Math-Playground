@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class OutsiderControls : MonoBehaviour
@@ -20,14 +21,18 @@ public class OutsiderControls : MonoBehaviour
     private Light spotlight;
     private float redshift;
 
+    // Pathing
     [SerializeField]
     private Collider pathingBox;
-
     private Vector3 movingTo;
+    public float acceleration = 2;
+    public Vector3 dir = Vector3.zero;
+
 
     void Start()
     {
         unitCircleProj = Mathf.Cos(Mathf.Deg2Rad * sightConeAngle * 0.5f);
+        movingTo = GetNewDestination();
     }
 
     void Update()
@@ -58,6 +63,8 @@ public class OutsiderControls : MonoBehaviour
             {
                 redshift -= Time.deltaTime;
             }
+
+            ContinueMoving();
         }
         // Just to be on the safe side this never flips over.
         redshift = Mathf.Clamp01(redshift);
@@ -65,6 +72,7 @@ public class OutsiderControls : MonoBehaviour
         spotlight.intensity = 2 + redshift * 3;
         spotlight.color = new Color(1, 1 - redshift, 1 - redshift, 1);
 
+        Move();
     }
 
     private void OnValidate()
@@ -93,6 +101,13 @@ public class OutsiderControls : MonoBehaviour
         return unNormed;
     }
 
+    // Everything down from here is just outsider movement stuff.
+    private void Move()
+    {
+        dir *= .998f;
+        transform.position += dir * Time.deltaTime;
+    }
+
     private void ContinueMoving()
     {
         if (MyMagnitude(this.transform.position - movingTo) < 1)
@@ -100,7 +115,7 @@ public class OutsiderControls : MonoBehaviour
             movingTo = GetNewDestination();
         }
 
-
+        dir += (movingTo - transform.position).normalized * Time.deltaTime * acceleration;
     }
 
     private Vector3 GetNewDestination()

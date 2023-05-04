@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-    [SerializeField] private float speed = 5;
-    [SerializeField] private float rotation_speed = 3;
-    private Vector3 rotation = Vector3.zero;
+    
+    [SerializeField] private float speed = 8;
+    private Vector3 rotation;
+    
+    private void Awake()
+    {
+        rotation = new(30, 180, 0);
+    }
 
     void Update()
     {
@@ -25,7 +29,8 @@ public class PlayerController : MonoBehaviour
 
         rotation.x -= Input.GetAxis("Mouse Y");
         rotation.y += Input.GetAxis("Mouse X");
-        transform.eulerAngles = rotation * rotation_speed;
+        rotation.x = Mathf.Clamp(rotation.x, -70, 70);
+        transform.localEulerAngles = rotation;
 
     }
 }

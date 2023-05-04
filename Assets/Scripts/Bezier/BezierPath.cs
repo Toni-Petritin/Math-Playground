@@ -71,11 +71,6 @@ public class BezierPath : MonoBehaviour
         Gizmos.DrawSphere(tPos, 0.25f);
         
 
-
-        //// Draw the direction at the position
-        //Gizmos.color = Color.blue;
-        //Gizmos.DrawLine(tPos, tPos+5.0f*tDir);
-
         // Try to get the rotation
         Quaternion rot = Quaternion.LookRotation(tDir);
         Handles.PositionHandle(tPos, rot);
@@ -88,11 +83,6 @@ public class BezierPath : MonoBehaviour
             }
             DrawWireFrame(points.Length - 1, 0);
         }
-
-        ////Gizmos.DrawSphere(tPos + (rot * Vector3.right), 0.25f);  
-        ////Gizmos.DrawSphere(tPos + (rot * Vector3.left), 0.25f);  
-        ////Gizmos.DrawSphere(tPos + (rot * Vector3.up), 0.25f);  
-        ////Gizmos.DrawSphere(tPos + (rot * Vector3.up*2.0f), 0.25f);  
     }
 
     private void Awake()
@@ -105,6 +95,7 @@ public class BezierPath : MonoBehaviour
 
     private void OnValidate()
     {
+        
         GenerateMesh();
     }
 
@@ -172,7 +163,6 @@ public class BezierPath : MonoBehaviour
                 uvs.Add(new Vector2(roadpoint.x / 10f + .5f, t));
             }
         }
-
 
         // triangles
         // how many lines:
