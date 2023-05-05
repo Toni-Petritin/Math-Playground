@@ -103,7 +103,7 @@ public class OutGlider : MonoBehaviour
         Vector3 horizontalProj = Vector3.Cross(lookAtUp, Vector3.Cross(targetDir, lookAtUp)).normalized;
 
         // Checks if the target is within a projected rectangle along lookAtForward vector within sightRange distance.
-        if (Vector3.Dot(targetDir,verticalProj) > vertCircleProj && Vector3.Dot(targetDir,horizontalProj) > horCircleProj
+        if (Vector3.Dot(lookAtForward, verticalProj) > vertCircleProj && Vector3.Dot(lookAtForward,horizontalProj) > horCircleProj
             && Vector3.Distance(transform.position, targetObject.transform.position) < sightRange)
         {
             seeTarget= true;
