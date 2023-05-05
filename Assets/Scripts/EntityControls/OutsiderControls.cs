@@ -37,6 +37,9 @@ public class OutsiderControls : MonoBehaviour
     public float summonInterval = .5f;
     private float summonTimer = 0;
 
+    // I also originally had a shader that made the outsider ripple, but it didn't look
+    // as cool as it did in my head.
+
     void Start()
     {
         // This is constant so there is no point calculating it on every frame.
@@ -45,6 +48,7 @@ public class OutsiderControls : MonoBehaviour
         movingTo = GetNewDestination();
     }
 
+    // I should probably use fixed update for some of these things, but whatever.
     void Update()
     {
 
@@ -121,6 +125,8 @@ public class OutsiderControls : MonoBehaviour
     }
 
     // Everything down from here is just outsider movement stuff.
+    // I originally wanted to use the easing functions for the movement,
+    // but it just didn't quite fit the purpose.
     private void Move()
     {
         dir *= .998f;

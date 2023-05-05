@@ -6,16 +6,18 @@ using UnityEngine;
 public class OutGlider : MonoBehaviour
 {
     // Vision related
-    public float sightRange = 5;
+    public float sightRange = 6;
     public GameObject lookDirObject;
     public GameObject targetObject;
     public float sightConeAngleHorizontal = 60;
-    [SerializeField]
     private float horCircleProj;
     public float sightConeAngleVertical = 20;
-    [SerializeField]
     private float vertCircleProj;
-    public float targetAtRange;
+
+    // Spotlight - not rectangle like the vision. I don't know how to make a rectangle light, I'm sorry.
+    [SerializeField]
+    private Light spotlight;
+    private float alphashift;
 
     // AI state condition related
     [Range(2f,30f)]
@@ -46,20 +48,24 @@ public class OutGlider : MonoBehaviour
 
     private void Update()
     {
-        CheckSight();
-
+        // It would be really cool if these attacked or tried to crash into the BlueWing,
+        // but alas, this is just a random little experiment.
         if (active)
         {
             lifeFuel -= Time.deltaTime;
             if (lifeFuel > 0)
             {
+                CheckSight();
                 ContinueMoving();
             }
             else if (lifeFuel < -5)
             {
                 Destroy(gameObject);
             }
-
+            if (lifeFuel < 0 && seeTarget)
+            {
+                seeTarget = false;
+            }
         }
         else
         {
@@ -71,9 +77,22 @@ public class OutGlider : MonoBehaviour
             }
         }
 
+        if (seeTarget && alphashift < 10.0f)
+        {
+            alphashift += Time.deltaTime;
+        }
+        else if (!seeTarget && alphashift > 1f)
+        {
+            alphashift -= Time.deltaTime;
+        }
+
+        spotlight.intensity = alphashift;
+
         Move();
     }
 
+    // In the absense of the placeon surface crossproduct, which we did in class,
+    // I hope this is somewhat evidence I know how to use crossproduct.
     private void CheckSight()
     {
         Vector3 lookAtUp = Vector3.Cross(lookDirObject.transform.position - transform.position, transform.right).normalized;
@@ -95,6 +114,7 @@ public class OutGlider : MonoBehaviour
         }
 
         //These are to help visualize what's what in play mode, if you need it.
+        // I put a few more originally, but it became such a mess of lines I just left these.
         Debug.DrawRay(transform.position, lookAtForward * 2, Color.blue);
         Debug.DrawRay(transform.position, transform.right * 2, Color.red);
         Debug.DrawRay(transform.position, lookAtUp * 2, Color.green);
@@ -130,7 +150,7 @@ public class OutGlider : MonoBehaviour
 
     private void GravityFalls()
     {
-        dir += Vector3.down * 2 * Time.deltaTime;
+        dir += Vector3.down * Time.deltaTime * 2;
     }
 
 
@@ -145,121 +165,4 @@ public class OutGlider : MonoBehaviour
         return position;
     }
 
-
-    //private void OnDrawGizmos()
-    //{
-    //    Vector3 lookDirV = lookDirObject.transform.position - transform.position;
-    //    Vector3 targetV = targetObject.transform.position - transform.position;
-    //    unitCircleProj = Mathf.Cos(Mathf.Deg2Rad * sightConeAngleHorizontal * 0.5f);
-
-    //    // D_tick = ((V.cross(D)).cross(V)).normalize();
-    //    // Z = cos(theta)*V + sin(theta)*D_tick;
-
-    //    // I'm marking the "enemy" with a white dot here and drawing a line to the vision indicator gameobject (to find it easier).
-    //    Gizmos.color = Color.white;
-    //    Gizmos.DrawLine(lookDirObject.transform.position, transform.position);
-    //    //Gizmos.DrawSphere(transform.position, 1f);
-    //    Gizmos.color = Color.yellow;
-    //    DrawSightCone(lookDirV, 5);
-
-
-    //    targetAtRange = OwnMagnitude(targetV);
-
-    //    lookDirV = OwnNormalize(lookDirV, OwnMagnitude(lookDirV));
-    //    targetV = OwnNormalize(targetV, OwnMagnitude(targetV));
-
-    //    scalarDot = targetV.x * lookDirV.x + targetV.z * lookDirV.z;
-
-
-    //    // I did this check without the trigonometry I used elsewhere, because you wanted it so, I think?
-    //    if (scalarDot > unitCircleProj && targetAtRange < sightRange)
-    //    {
-    //        Gizmos.color = Color.red;
-    //    }
-    //    else
-    //    {
-    //        Gizmos.color = Color.green;
-
-    //    }
-
-    //    Gizmos.DrawSphere(targetObject.transform.position, 1f);
-
-    //}
-
-    //// This draws the vision cone. It's just to make it look pretty. You don't need to understand what is happening here.
-    //private void DrawSightCone(Vector3 dir, float steps)
-    //{
-
-    //    float srcAngles = Mathf.Rad2Deg * Mathf.Atan2(dir.z, dir.x);
-    //    Vector3 initialPos = transform.position;
-    //    Vector3 posA = initialPos;
-    //    float stepAngles = sightConeAngleHorizontal / steps;
-    //    float angle = srcAngles - sightConeAngleHorizontal / 2;
-    //    for (int i = 0; i <= steps; i++)
-    //    {
-    //        // I'm sure with like half an hour of extra work I'd do this smarter, but this is how it's going to be now.
-    //        float rad = Mathf.Deg2Rad * angle;
-    //        Vector3 posB = initialPos;
-    //        posB += new Vector3(sightRange * Mathf.Cos(rad), 0, sightRange * Mathf.Sin(rad));
-
-    //        Gizmos.DrawLine(posA, posB);
-
-    //        angle += stepAngles;
-    //        posA = posB;
-    //    }
-    //    Gizmos.DrawLine(posA, initialPos);
-    //}
-
-    //// I wrote my own method for magnitude and normalize, because I don't know.
-    //private float OwnMagnitude(Vector3 toMeasure)
-    //{
-    //    float magnit = Mathf.Sqrt(toMeasure.x * toMeasure.x + toMeasure.z * toMeasure.z);
-    //    return magnit;
-    //}
-
-    //private Vector3 OwnNormalize(Vector3 unNormed, float magnit)
-    //{
-    //    unNormed.y = 0;
-    //    return unNormed.normalized;
-    //}
-
-
-
-
-    //public void Initialize(Vector3 startPos, Vector3 endPos)
-    //{
-    //    m_startPos = startPos;
-    //    m_endPos = endPos;
-    //    m_isInitialized = true;
-    //    GetComponent<TrailRenderer>().enabled = false;
-    //}
-
-    //if (m_elapsedTime > m_timeToTarget)
-    //{
-    //    //Explode();
-    //    return;
-    //}
-
-    //m_elapsedTime += Time.deltaTime;
-
-    //float t = m_elapsedTime / m_timeToTarget;
-
-    //static float f(float x, float h) => -4 * h * x * x + 4 * h * x;
-    //if (t < .5f)
-    //{
-    //    transform.position = new Vector3(m_startPos.x, f(t, m_arcHeight) + Mathf.Lerp(m_startPos.y, m_endPos.y, t), m_startPos.z);
-    //}
-    //else
-    //{
-    //    GetComponent<TrailRenderer>().enabled = true;
-    //    Vector3 mid = Vector3.Lerp(m_startPos, m_endPos, (t - .5f) * (t - .5f) * (t - .5f) * 8);
-    //    transform.position = new Vector3(mid.x, f(t, m_arcHeight) + Mathf.Lerp(m_startPos.y, m_endPos.y, t), mid.z);
-    //}
-
-    //public override void Explode()
-    //{
-    //    Instantiate(Exploder, transform.position + m_explosionOffset, Quaternion.identity);
-    //    _ = SpawnExplosion(transform.position + m_explosionOffset);
-    //    Destroy(gameObject);
-    //}
 }

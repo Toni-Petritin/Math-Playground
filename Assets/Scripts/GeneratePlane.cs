@@ -12,8 +12,10 @@ public class GeneratePlane : MonoBehaviour {
     public int Segments = 5;
 
     // Generation variables
-    [Range(0f,10000f)]
-    public float offsetSeed = 0;
+    [Range(-10000f,10000f)]
+    public float offsetSeedX = 0;
+    [Range(-10000f, 10000f)]
+    public float offsetSeedZ = 0;
     [Range(3, 10)]
     public float AmplitudeFirst = 5;
     [Range(3, 10)]
@@ -30,6 +32,7 @@ public class GeneratePlane : MonoBehaviour {
     public float platouLevel = 1;
     [Range(0, 5)]
     public float AmplitudeRock = 1;
+    // These are for the black blobs that are trying to be rocks.
     [Range(1f,10f)]
     public float DivRock1 = 4;
     [Range(1f, 4f)]
@@ -37,7 +40,7 @@ public class GeneratePlane : MonoBehaviour {
     [Range(0.01f, 5f)]
     public float DivRockBottom1 = .1f;
 
-    // For the shader
+    // For the terrain shader
     public Gradient terrainGradient;
 
     private Mesh mesh = null;
@@ -68,12 +71,16 @@ public class GeneratePlane : MonoBehaviour {
         float y = 0.0f;
 
 
-
+        // I had and idea, where you would generate the terrain indefinitely with the offsetSeeds,
+        // and the track would create itself along the terrain with the ousiders spawning in and out
+        // as the BlueWing went along, but that felt like slightly too much work for this project.
+        // If I'd had that idea before I was 70% done with all this, I might have gone with that instead.
+        // *Shrug*
         for (int seg_x = 0; seg_x <= Segments; seg_x++) {
-            x = (float)seg_x * delta + offsetSeed;
+            x = (float)seg_x * delta + offsetSeedX;
             for (int seg_z = 0; seg_z <= Segments; seg_z++) {
 
-                z = (float)seg_z * delta + offsetSeed;
+                z = (float)seg_z * delta + offsetSeedZ;
 
                 // Generate the Perlin Noise
                 float y1 = (Mathf.PerlinNoise(x / DivFirst, z / DivFirst) *
