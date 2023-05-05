@@ -20,6 +20,7 @@ public class OutsiderControls : MonoBehaviour
     // These just so we can see the numbers in the editor.
     [SerializeField]
     private float scalarDot;
+    // Oh, this is useful otherwise too.
     [SerializeField]
     private float unitCircleProj;
 
@@ -38,7 +39,9 @@ public class OutsiderControls : MonoBehaviour
 
     void Start()
     {
+        // This is constant so there is no point calculating it on every frame.
         unitCircleProj = Mathf.Cos(Mathf.Deg2Rad * sightConeAngle * 0.5f);
+        
         movingTo = GetNewDestination();
     }
 

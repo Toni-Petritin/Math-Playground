@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1757681816942077864}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146,10 +146,15 @@ MonoBehaviour:
   sightRange: 15
   lookDirObject: {fileID: 1757681816942077864}
   targetObject: {fileID: 0}
-  lifeFuel: 10
-  activationTimer: 3
+  sightConeAngleHorizontal: 60
+  horCircleProj: 0
+  sightConeAngleVertical: 20
+  vertCircleProj: 0
+  targetAtRange: 0
+  lifeFuel: 20
+  activationTimer: 2
   pathingBox: {fileID: 0}
-  acceleration: 4
+  acceleration: 5
   dir: {x: 0, y: 0, z: 0}
 --- !u!96 &-637697589223605194
 TrailRenderer:
