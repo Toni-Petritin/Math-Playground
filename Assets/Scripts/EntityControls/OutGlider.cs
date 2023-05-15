@@ -134,7 +134,15 @@ public class OutGlider : MonoBehaviour
         GravityFalls();
         dir *= .998f;
         transform.position += dir * Time.deltaTime;
-        Vector3 adjustedDir = new Vector3(dir.x, transform.position.y, dir.z);
+        Vector3 adjustedDir;
+        if (seeTarget)
+        {
+            adjustedDir = new Vector3(targetObject.transform.position.x, transform.position.y, targetObject.transform.position.z);
+        }
+        else
+        {
+            adjustedDir = new Vector3(dir.x, transform.position.y, dir.z);
+        }
         transform.LookAt(adjustedDir);
     }
 

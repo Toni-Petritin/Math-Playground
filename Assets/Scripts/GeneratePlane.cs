@@ -12,9 +12,9 @@ public class GeneratePlane : MonoBehaviour {
     public int Segments = 5;
 
     // Generation variables
-    [Range(-10000f,10000f)]
+    [Range(0,10000f)]
     public float offsetSeedX = 0;
-    [Range(-10000f, 10000f)]
+    [Range(0, 10000f)]
     public float offsetSeedZ = 0;
     [Range(3, 10)]
     public float AmplitudeFirst = 5;
